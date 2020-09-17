@@ -5,22 +5,24 @@ using namespace std;
 class PID
 {
 private:
-    /* data */
+    double Kp; 
+    double Kd; 
+    double Ki;
+    double state;
+    
 public:
     PID(/* args */);
     ~PID();
 
-    double Kp; 
-    double Kd; 
-    double Ki; 
-
     double computeForce(double & state, double & desired ); 
+    void setGains(double Kp_, double Kd_, double Ki_); 
+    void setState(double x_); 
 };
 
-PID::PID(/* args */)
+PID::PID()
 {
-    Kd  = 0.01; 
-    Kp = 1; 
+    Kd  = 0.0; 
+    Kp = 0.0; 
     Ki =0.0; 
 }
 
@@ -50,15 +52,32 @@ double PID::computeForce(double & state , double & desired)
     return computeForce_; 
 }
 
+void PID::setGains(double Kp_, double Kd_, double Ki_)
+{
+    Kp = Kp_; 
+    Kd = Kd_; 
+    Ki = Ki_; 
+}
+
+void PID::setState(double x_)
+{
+    state = x_; 
+
+}
+
 int main()
 {
     PID pid; 
 
-    pid.Ki = 0.0; 
-    pid.Kp = 1.0; 
-    pid.Kd = 0.01; 
+    double Ki_g = 0.0; 
+    double Kp_g = 1.0; 
+    double Kd_g = 0.01; 
+
+    pid.setGains(Kp_g, Kd_g, Ki_g); 
 
     double X = 1.0; 
+    pid.setState(X); 
+
     double desX = 0.5; 
 
    double output =  pid.computeForce(X, desX); 
