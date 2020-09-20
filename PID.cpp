@@ -1,38 +1,21 @@
-#include <iostream>
-
-using namespace std; 
-
-class PID
-{
-private:
-    double Kp; 
-    double Kd; 
-    double Ki;
-    double state;
-    
-public:
-    PID(/* args */);
-    ~PID();
-
-    double computeForce(double & state, double & desired ); 
-    void setGains(double Kp_, double Kd_, double Ki_); 
-    void setState(double x_); 
-};
+#include "PID.h"
 
 PID::PID()
 {
-    Kd  = 0.0; 
-    Kp = 0.0; 
-    Ki =0.0; 
+    Kd      =   0.0; 
+    Kp      =   0.0; 
+    Ki      =   0.0; 
+    state   =   0.0; 
+    desX    =   0.0; 
 }
 
 PID::~PID()
 {
 }
 
-double PID::computeForce(double & state , double & desired)
+double PID::computeForce()
 {
-    double error = desired - state; 
+    double error = desX - state; 
     double prev_err = 0.0 ; 
     double sum_err = 0.0 ; 
 
@@ -65,6 +48,11 @@ void PID::setState(double x_)
 
 }
 
+void PID::setdesX(double desx_)
+{
+    desX = desx_; 
+}
+
 int main()
 {
     PID pid; 
@@ -75,12 +63,14 @@ int main()
 
     pid.setGains(Kp_g, Kd_g, Ki_g); 
 
-    double X = 1.0; 
-    pid.setState(X); 
+    double X_ = 1.0;
+    double desX__ = 0.5; 
+ 
+    pid.setState(X_); 
+    pid.setdesX(desX__); 
+    
 
-    double desX = 0.5; 
-
-   double output =  pid.computeForce(X, desX); 
+   double output =  pid.computeForce(); 
 
    std::cout << "pid out "<< output << std::endl; 
 
